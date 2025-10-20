@@ -62,11 +62,14 @@ document.addEventListener('DOMContentLoaded', () => {
     createCursorTrail();
     
     // Random scary quote generator
-    setInterval(() => {
+    const quoteInterval = setInterval(() => {
         if (Math.random() > 0.95) { // 5% chance every interval
             showRandomScaryQuote();
         }
     }, 10000); // Check every 10 seconds
+    
+    // Store interval ID for cleanup if needed
+    window.scareVerseQuoteInterval = quoteInterval;
 });
 
 // Notification system
@@ -81,81 +84,31 @@ function showNotification(message) {
     const notification = document.createElement('div');
     notification.className = 'notification';
     notification.textContent = message;
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 20px;
-        background-color: #1a1a1a;
-        color: #ff0000;
-        padding: 1rem 2rem;
-        border: 2px solid #ff0000;
-        border-radius: 5px;
-        box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-        z-index: 2000;
-        animation: slideIn 0.5s ease-out;
-        font-weight: bold;
-    `;
-    
-    // Add animation styles
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
     
     document.body.appendChild(notification);
     
     // Remove after 3 seconds
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.5s ease-out';
+        notification.classList.add('slide-out');
         setTimeout(() => {
             notification.remove();
         }, 500);
     }, 3000);
 }
 
-// Cursor trail effect
+// Cursor trail effect (optimized)
 function createCursorTrail() {
     let cursorTrail = [];
-    const trailLength = 10;
+    const trailLength = 8;
+    const createFrequency = 0.7; // 30% of mouse moves create trail
     
     document.addEventListener('mousemove', (e) => {
         // Only create trail occasionally to reduce performance impact
-        if (Math.random() > 0.7) {
+        if (Math.random() > createFrequency) {
             const trail = document.createElement('div');
             trail.className = 'cursor-trail';
-            trail.style.cssText = `
-                position: fixed;
-                width: 5px;
-                height: 5px;
-                background-color: #ff0000;
-                border-radius: 50%;
-                pointer-events: none;
-                z-index: 9999;
-                left: ${e.clientX}px;
-                top: ${e.clientY}px;
-                opacity: 0.6;
-                transition: opacity 0.5s;
-            `;
+            trail.style.left = `${e.clientX}px`;
+            trail.style.top = `${e.clientY}px`;
             
             document.body.appendChild(trail);
             cursorTrail.push(trail);

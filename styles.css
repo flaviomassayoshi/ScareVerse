@@ -10,6 +10,7 @@ body {
     color: #e0e0e0;
     line-height: 1.6;
     overflow-x: hidden;
+    animation: fadeIn 1s ease-in;
 }
 
 .container {
@@ -316,7 +317,7 @@ footer {
     }
 }
 
-/* Animation for body */
+/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -326,6 +327,57 @@ footer {
     }
 }
 
-body {
-    animation: fadeIn 1s ease-in;
+@keyframes slideIn {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOut {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+/* Notification styles */
+.notification {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    background-color: #1a1a1a;
+    color: #ff0000;
+    padding: 1rem 2rem;
+    border: 2px solid #ff0000;
+    border-radius: 5px;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    z-index: 2000;
+    animation: slideIn 0.5s ease-out;
+    font-weight: bold;
+}
+
+.notification.slide-out {
+    animation: slideOut 0.5s ease-out;
+}
+
+/* Cursor trail styles */
+.cursor-trail {
+    position: fixed;
+    width: 5px;
+    height: 5px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+    transition: opacity 0.5s;
 }
